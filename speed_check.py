@@ -28,14 +28,15 @@ def estimateSpeed(location1, location2):
 
 #***********************************************************************************************************************************************
 
-def mail(carID,speed2,asma,ceza_tutar,indirimli_ceza):
+def mail(carID,speed2,asma,ceza_tutar,indirimli_ceza,hesaplanan_asma):
 
     email="birkullanicix@gmail.com"
     receiver_email="birkullanicix@gmail.com"
     subject="Hiz siniri asma cezasi"
-    message=f"""{carID} numarali arac {speed2} hizi ile hiz sinirini % {asma} oraninda asmistir.
+    message=f"""        {carID} numarali arac {speed2} Km/h ile hiz sinirini %{asma} oraninda asmistir.
+	{carID} numarali aracin hiz sinirini %{hesaplanan_asma}'den fazla astigi tespit edildiginden dolayi cezai islem uygulanmistir.
 	Yazilan ceza tutari:{ceza_tutar} TL.
-	Eger 15 gun icinde odenirse yeni olusan ceza tutari:{indirimli_ceza} TL"""
+	Eger 15 gun icinde odenirse odenecek ceza tutari:{indirimli_ceza} TL"""
     text=f"Subject:{subject}\n\n{message}"
     server=smtplib.SMTP("smtp.gmail.com",587)
     server.starttls()
@@ -52,7 +53,17 @@ def ceza_hesap(asma_miktari):
 		if i==0:
 			break
 		i-=1
+# *******************************************************************************************************************************************************
 		
+def asim_hesaplama(asma_miktari):
+	j=len(veri["Hız Sınırı Aşım Oranı"])-1
+	while True:
+		if float(asma_miktari)>=float(veri["Hız Sınırı Aşım Oranı"][j]):
+			return veri["Hız Sınırı Aşım Oranı"][j]
+		if j==0:
+			break
+		j-=1
+
 # *************************************************************************************************************************************************	
 
 def trackMultipleObjects():
@@ -194,7 +205,8 @@ def trackMultipleObjects():
 							# print("*****************",ceza_hesap(asma_miktari),"***********************")
 							ceza_tutar=ceza_hesap(asma_miktari)
 							indirimli_ceza=float(ceza_tutar)*.75
-							mail(carID,speed2[i],asma_miktari,ceza_tutar,indirimli_ceza)
+							hesaplanan_asma=asim_hesaplama(asma_miktari)
+							mail(carID,speed2[i],asma_miktari,ceza_tutar,indirimli_ceza,hesaplanan_asma)
 			# continue
 						# break
 
