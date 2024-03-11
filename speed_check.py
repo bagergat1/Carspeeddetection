@@ -3,7 +3,7 @@ import dlib
 import time
 import threading
 import math
-# import emaildeneme
+import smtplib
 import pandas as pd
 import numpy as np
 # araciletisim=input("Araç sahibinin mail adresini girin:")
@@ -28,16 +28,14 @@ def estimateSpeed(location1, location2):
 
 #***********************************************************************************************************************************************
 
-def mail(carID,speed2,asma):
-    # carID=self.carID
-    # speed=self.speed
-    # asma=self.asma
-    import smtplib
+def mail(carID,speed2,asma,ceza_tutar,indirimli_ceza):
 
     email="birkullanicix@gmail.com"
     receiver_email="birkullanicix@gmail.com"
     subject="Hiz siniri asma cezasi"
-    message=f"{carID} numarali arac {speed2} hizi ile hiz sinirini % {asma} oraninda asmistir."
+    message=f"""{carID} numarali arac {speed2} hizi ile hiz sinirini % {asma} oraninda asmistir.
+	Yazilan ceza tutari:{ceza_tutar} TL.
+	Eger 15 gun icinde odenirse yeni olusan ceza tutari:{indirimli_ceza} TL"""
     text=f"Subject:{subject}\n\n{message}"
     server=smtplib.SMTP("smtp.gmail.com",587)
     server.starttls()
@@ -193,8 +191,10 @@ def trackMultipleObjects():
 							speed2[i]=float(speed2[i])
 							print(f"{carID} numarali aracin hizi {speed2[i]} \n % {asma_miktari} hiz sinirini asma tespit edildi")
 							ceza_yiyenler.append(carID)
-							print("*****************",ceza_hesap(asma_miktari),"***********************")
-							mail(carID,speed2[i],asma_miktari)
+							# print("*****************",ceza_hesap(asma_miktari),"***********************")
+							ceza_tutar=ceza_hesap(asma_miktari)
+							indirimli_ceza=float(ceza_tutar)*.75
+							mail(carID,speed2[i],asma_miktari,ceza_tutar,indirimli_ceza)
 			# continue
 						# break
 
