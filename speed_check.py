@@ -22,7 +22,7 @@ def estimateSpeed(location1, location2):
 	ppm = 10
 	d_meters = d_pixels / ppm
 	#print("d_pixels=" + str(d_pixels), "d_meters=" + str(d_meters))
-	fps = 18
+	fps = 15
 	speed = d_meters * fps * 3.6
 	return speed
 
@@ -45,44 +45,11 @@ def mail(carID,speed2,asma):
     server.sendmail(email,receiver_email,text)
     print("Ceza mail'i gönderilmiştir.")
 
-#***********************************************************************************************************************************************
-
-# def dokuman_olustur(veri):
-#     veri.drop(columns=["Unnamed: 0"],axis=1,inplace=True)
-#     i=0
-#     j=len(veri["Hız Sınırı Aşım Oranı"])-1
-	# for i in veri:
-
-	# while True:
-    # 	veri["Ceza Tutarı"][i]=veri["Ceza Tutarı"][i].replace(".","")
-    #     veri["Ceza Tutarı"][i]=veri["Ceza Tutarı"][i].replace(",",".")
-    #     veri["Hız Sınırı Aşım Oranı"][i]=float(veri["Hız Sınırı Aşım Oranı"][i].replace("%",""))
-    #     veri["Ceza Tutarı"][i]=float(veri["Ceza Tutarı"][i])
-    #     i+=1
-    #     if i==len(veri):
-    #         break
-	# veri.to_excel("Duzenlenmis.xlsx")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # *****************************************************************************************************************************************************
 def ceza_hesap(asma_miktari):
 	i=len(veri["Hız Sınırı Aşım Oranı"])-1
 	while True:
-		if float(asma_miktari)<float(veri["Hız Sınırı Aşım Oranı"][i]):
+		if float(asma_miktari)>=float(veri["Hız Sınırı Aşım Oranı"][i]):
 			return veri["Ceza Tutarı"][i]
 		if i==0:
 			break
@@ -226,7 +193,7 @@ def trackMultipleObjects():
 							speed2[i]=float(speed2[i])
 							print(f"{carID} numarali aracin hizi {speed2[i]} \n % {asma_miktari} hiz sinirini asma tespit edildi")
 							ceza_yiyenler.append(carID)
-							ceza_hesap(asma_miktari)
+							print("*****************",ceza_hesap(asma_miktari),"***********************")
 							mail(carID,speed2[i],asma_miktari)
 			# continue
 						# break
