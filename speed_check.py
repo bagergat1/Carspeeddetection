@@ -9,7 +9,7 @@ import numpy as np
 # araciletisim=input("Araç sahibinin mail adresini girin:")
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
-video = cv2.VideoCapture('cars.mp4')
+video = cv2.VideoCapture('traffic-mp4.mp4')
 
 WIDTH = 1280
 HEIGHT = 720
@@ -19,10 +19,10 @@ ceza_yiyenler=list()
 def estimateSpeed(location1, location2):
 	d_pixels = math.sqrt(math.pow(location2[0] - location1[0], 2) + math.pow(location2[1] - location1[1], 2))
 	# ppm = location2[2] / carWidht
-	ppm = 10
+	ppm = 8
 	d_meters = d_pixels / ppm
 	#print("d_pixels=" + str(d_pixels), "d_meters=" + str(d_meters))
-	fps = 15
+	fps = 18
 	speed = d_meters * fps * 3.6
 	return speed
 
@@ -197,14 +197,19 @@ def trackMultipleObjects():
 
 						#print ('CarID ' + str(i) + ' Location1: ' + str(carLocation1[i]) + ' Location2: ' + str(carLocation2[i]) + ' speed is ' + str("%.2f" % round(speed[i], 0)) + ' km/h.\n')
 						asma_miktari=format(((speed[i]*100)/yasal_hiz_siniri)-100,".2f")
-						if speed[i]>=50:
+						if speed[i]>=yasal_hiz_siniri:
 							speed2[i]=format(speed[i],".2f")
 							speed2[i]=float(speed2[i])
 							print(f"{carID} numarali aracin hizi {speed2[i]} \n % {asma_miktari} hiz sinirini asma tespit edildi")
 							ceza_yiyenler.append(carID)
 							# print("*****************",ceza_hesap(asma_miktari),"***********************")
 							ceza_tutar=ceza_hesap(asma_miktari)
+# ********************************************************************************************************************************************
+
 							indirimli_ceza=float(ceza_tutar)*.75
+							
+# ********************************************************************************************************************************************
+							
 							hesaplanan_asma=asim_hesaplama(asma_miktari)
 							mail(carID,speed2[i],asma_miktari,ceza_tutar,indirimli_ceza,hesaplanan_asma)
 			# continue
