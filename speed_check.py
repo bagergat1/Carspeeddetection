@@ -15,6 +15,12 @@ WIDTH = 1280
 HEIGHT = 720
 yasal_hiz_siniri=50
 ceza_yiyenler=list()
+ceza_yiyenler2=list()
+hesaplanan_asma2=list()
+
+asma_miktari2=list()
+ceza_tutar2=list()
+indirimli_ceza2=list()
 
 def estimateSpeed(location1, location2):
 	d_pixels = math.sqrt(math.pow(location2[0] - location1[0], 2) + math.pow(location2[1] - location1[1], 2))
@@ -197,24 +203,44 @@ def trackMultipleObjects():
 
 						#print ('CarID ' + str(i) + ' Location1: ' + str(carLocation1[i]) + ' Location2: ' + str(carLocation2[i]) + ' speed is ' + str("%.2f" % round(speed[i], 0)) + ' km/h.\n')
 						asma_miktari=format(((speed[i]*100)/yasal_hiz_siniri)-100,".2f")
+						
 						if speed[i]>=yasal_hiz_siniri:
 							speed2[i]=format(speed[i],".2f")
 							speed2[i]=float(speed2[i])
-							print(f"{carID} numarali aracin hizi {speed2[i]} \n % {asma_miktari} hiz sinirini asma tespit edildi")
+							# print(f"{carID} numarali aracin hizi {speed2[i]} \n % {asma_miktari} hiz sinirini asma tespit edildi")
 							ceza_yiyenler.append(carID)
 							# print("*****************",ceza_hesap(asma_miktari),"***********************")
+							ceza_yiyenler2=pd.Series(ceza_yiyenler)
+							ceza_yiyenler2=ceza_yiyenler2.unique()
+							
+							# ceza_yiyenler2=df.unique()
+							# print(ceza_yiyenler2)
 							ceza_tutar=ceza_hesap(asma_miktari)
 # ********************************************************************************************************************************************
-
+							
 							indirimli_ceza=float(ceza_tutar)*.75
 							
 # ********************************************************************************************************************************************
 							
 							hesaplanan_asma=asim_hesaplama(asma_miktari)
-							mail(carID,speed2[i],asma_miktari,ceza_tutar,indirimli_ceza,hesaplanan_asma)
-			# continue
+							asma_miktari2.append(asma_miktari)
+							# print(pd.Series(asma_miktari2).unique())
+							ceza_tutar2.append(ceza_tutar)
+							# print(pd.Series(ceza_tutar2).unique())
+							indirimli_ceza2.append(indirimli_ceza)
+							# print(pd.Series(indirimli_ceza2).unique())
+							hesaplanan_asma2.append(hesaplanan_asma)
+							# print(pd.Series(hesaplanan_asma2).unique())
+							# mail(carID,speed2[i],asma_miktari,ceza_tutar,indirimli_ceza,hesaplanan_asma)
+			# continue		
 						# break
-
+							
+							# print(carIDtoDelete)
+							# for i in range(len(carIDtoDelete)):
+							# 	for j in range(len(ceza_yiyenler)):
+							# 		if carIDtoDelete[i]==ceza_yiyenler[j]:
+							# 			print("******************",i,"Ceza yedi")
+							# 			continue
 		cv2.imshow('result', resultImage)
 		#Write the frame into the file 'output.avi'
 		#out.write(resultImage)
@@ -222,6 +248,8 @@ def trackMultipleObjects():
 
 		if cv2.waitKey(33) == 27:
 			break
+
+		
 	
 	cv2.destroyAllWindows()
 # print(ceza_yiyenler)
