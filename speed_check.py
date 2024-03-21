@@ -6,24 +6,30 @@ import math
 import smtplib
 import pandas as pd
 import numpy as np
+import datetime
+
+
 # araciletisim=input("Araç sahibinin mail adresini girin:")
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
 video = cv2.VideoCapture('traffic-mp4.mp4')
 hizsiniriasimorani=list(veri["Hız Sınırı Aşım Oranı"])
 cezaorani=list(veri["Ceza Tutarı"])
-
+mesaj=list()
 WIDTH = 1280
 HEIGHT = 720
 yasal_hiz_siniri=50
-ceza_yiyenler=list()
-ceza_yiyenler2=list()
+# ceza_yiyenler=list()
+# ceza_yiyenler2=list()
+hesaplanan_asma1=list()
 hesaplanan_asma2=list()
-
+mesaj=list()
 asma_miktari2=list()
 ceza_tutar2=list()
-indirimli_ceza2=list()
-
+# indirimli_ceza2=list()
+ceza_tutar1=list()
+ceza_liste=list()
+ceza_liste2=list()
 def estimateSpeed(location1, location2):
 	d_pixels = math.sqrt(math.pow(location2[0] - location1[0], 2) + math.pow(location2[1] - location1[1], 2))
 	# ppm = location2[2] / carWidht
@@ -36,27 +42,24 @@ def estimateSpeed(location1, location2):
 
 #***********************************************************************************************************************************************
 
-def mail(carID,speed2,asma,ceza_tutar,indirimli_ceza,hesaplanan_asma):
-
+def mail(carID,speed2,asma,ceza_tutar,hesaplanan_asma):
     email="birkullanicix@gmail.com"
     receiver_email="birkullanicix@gmail.com"
     subject="Hiz siniri asma cezasi"
     message=f"""        {carID} numarali arac {speed2} Km/h ile hiz sinirini %{asma} oraninda asmistir.
 	{carID} numarali aracin hiz sinirini %{hesaplanan_asma}'den fazla astigi tespit edildiginden dolayi cezai islem uygulanmistir.
-	Yazilan ceza tutari:{ceza_tutar} TL.
-	Eger 15 gun icinde odenirse odenecek ceza tutari:{indirimli_ceza} TL"""
+	Yazilan ceza tutari:{ceza_tutar} TL."""
     text=f"Subject:{subject}\n\n{message}"
     server=smtplib.SMTP("smtp.gmail.com",587)
     server.starttls()
     server.login(email,"wrrt pxqr pyib nzcs")
     server.sendmail(email,receiver_email,text)
     print("Ceza mail'i gönderilmiştir.")
-
 # *****************************************************************************************************************************************************
 def ceza_hesap(asma_miktari,hizsiniriasimorani,cezaorani):
 	i=len(hizsiniriasimorani)-1
 	while True:
-		if float(asma_miktari!=None)>=float(hizsiniriasimorani[i]):
+		if float(asma_miktari)>=float(hizsiniriasimorani[i]):
 			return cezaorani[i]
 		if i==0:
 			break
@@ -73,6 +76,17 @@ def asim_hesaplama(asma_miktari,hizsiniriasimorani):
 		j-=1
 
 # *************************************************************************************************************************************************	
+
+data = cv2.VideoCapture('/home/bagergat/Desktop/yeni/cars.mp4') 
+frames = data.get(cv2.CAP_PROP_FRAME_COUNT) 
+fps = data.get(cv2.CAP_PROP_FPS) 
+seconds = round(frames / fps) 
+video_time = datetime.timedelta(seconds=seconds) 
+print(f"duration in seconds: {seconds}") 
+print(f"video time: {video_time}") 
+
+# *************************************************************************************************************************************************	
+
 
 def trackMultipleObjects():
 	rectangleColor = (0, 255, 0)
@@ -210,39 +224,56 @@ def trackMultipleObjects():
 							speed2[i]=format(speed[i],".2f")
 							speed2[i]=float(speed2[i])
 							# print(f"{carID} numarali aracin hizi {speed2[i]} \n % {asma_miktari} hiz sinirini asma tespit edildi")
-							ceza_yiyenler.append(carID)
+							# ceza_yiyenler.append(carID)
 							# print("*****************",ceza_hesap(asma_miktari),"***********************")
-							ceza_yiyenler2=pd.Series(ceza_yiyenler)
-							ceza_yiyenler2=ceza_yiyenler2.unique()
-							
-							# ceza_yiyenler2=df.unique()
+							# ceza_yiyenler2=pd.Series(ceza_yiyenler)
+							# ceza_yiyenler2=ceza_yiyenler2.unique()
 							# print(ceza_yiyenler2)
 							ceza_tutar=ceza_hesap(asma_miktari,hizsiniriasimorani,cezaorani)
+							
 # ********************************************************************************************************************************************
-							# print(ceza_tutar)
-							indirimli_ceza=float(ceza_tutar)*.75
+							# print(type(ceza_tutar))
+							# if isinstance(ceza_tutar,float):
+							# 	indirimli_ceza=float(ceza_tutar)*.75
 							
 # ********************************************************************************************************************************************
 							
 							hesaplanan_asma=asim_hesaplama(asma_miktari,hizsiniriasimorani)
-							asma_miktari2.append(asma_miktari)
+							# asma_miktari2.append(asma_miktari)
 							# print(pd.Series(asma_miktari2).unique())
-							ceza_tutar2.append(ceza_tutar)
-							# print(pd.Series(ceza_tutar2).unique())
-							indirimli_ceza2.append(indirimli_ceza)
+							# ceza_tutar1.append(ceza_tutar)
+							# ceza_tutar2=pd.Series(ceza_tutar1).unique()
+							# print(ceza_tutar2)
+							# indirimli_ceza2.append(indirimli_ceza)
 							# print(pd.Series(indirimli_ceza2).unique())
-							hesaplanan_asma2.append(hesaplanan_asma)
+							# hesaplanan_asma1.append(hesaplanan_asma)
+							# hesaplanan_asma2=pd.Series(hesaplanan_asma1).unique()
+							# hesaplanan_asma2.append(hesaplanan_asma)
 							# print(pd.Series(hesaplanan_asma2).unique())
-							# mail(carID,speed2[i],asma_miktari,ceza_tutar,indirimli_ceza,hesaplanan_asma)
+							# print(hesaplanan_asma2)
+							# mail(carID,speed2[i],asma_miktari,ceza_tutar,hesaplanan_asma)
 			# continue		
-						# break
 							
+						# break
+							if carID and speed2 and asma_miktari and ceza_tutar and hesaplanan_asma!=None:
+								my_dict=dict(carID=carID,speed2=speed2[i],asma=asma_miktari,ceza_tutar=ceza_tutar,hesaplanan_asma=hesaplanan_asma)
+								cezalar=pd.Series(my_dict)
+							# print(my_dict)
 							# print(carIDtoDelete)
 							# for i in range(len(carIDtoDelete)):
 							# 	for j in range(len(ceza_yiyenler)):
 							# 		if carIDtoDelete[i]==ceza_yiyenler[j]:
 							# 			print("******************",i,"Ceza yedi")
 							# 			continue
+						cezalar2=cezalar.unique()
+						print(cezalar2)
+						ceza_liste.append(cezalar2)
+						ceza_liste2=pd.Series(ceza_liste)
+						# time.sleep(5)
+						# with open("./kayitlar.txt","r+","UTF-8")as file:
+						# 	file.write(ceza_liste2)
+						ceza_liste2.to_excel("kayitlar.xlsx")
+						print(ceza_liste2)
 		cv2.imshow('result', resultImage)
 		#Write the frame into the file 'output.avi'
 		#out.write(resultImage)
