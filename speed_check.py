@@ -10,6 +10,8 @@ import numpy as np
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
 video = cv2.VideoCapture('traffic-mp4.mp4')
+hizsiniriasimorani=list(veri["Hız Sınırı Aşım Oranı"])
+cezaorani=list(veri["Ceza Tutarı"])
 
 WIDTH = 1280
 HEIGHT = 720
@@ -51,21 +53,21 @@ def mail(carID,speed2,asma,ceza_tutar,indirimli_ceza,hesaplanan_asma):
     print("Ceza mail'i gönderilmiştir.")
 
 # *****************************************************************************************************************************************************
-def ceza_hesap(asma_miktari):
-	i=len(veri["Hız Sınırı Aşım Oranı"])-1
+def ceza_hesap(asma_miktari,hizsiniriasimorani,cezaorani):
+	i=len(hizsiniriasimorani)-1
 	while True:
-		if float(asma_miktari)>=float(veri["Hız Sınırı Aşım Oranı"][i]):
-			return veri["Ceza Tutarı"][i]
+		if float(asma_miktari!=None)>=float(hizsiniriasimorani[i]):
+			return cezaorani[i]
 		if i==0:
 			break
 		i-=1
 # *******************************************************************************************************************************************************
 		
-def asim_hesaplama(asma_miktari):
-	j=len(veri["Hız Sınırı Aşım Oranı"])-1
+def asim_hesaplama(asma_miktari,hizsiniriasimorani):
+	j=len(hizsiniriasimorani)-1
 	while True:
-		if float(asma_miktari)>=float(veri["Hız Sınırı Aşım Oranı"][j]):
-			return veri["Hız Sınırı Aşım Oranı"][j]
+		if float(asma_miktari)>=float(hizsiniriasimorani[j]):
+			return hizsiniriasimorani[j]
 		if j==0:
 			break
 		j-=1
@@ -215,14 +217,14 @@ def trackMultipleObjects():
 							
 							# ceza_yiyenler2=df.unique()
 							# print(ceza_yiyenler2)
-							ceza_tutar=ceza_hesap(asma_miktari)
+							ceza_tutar=ceza_hesap(asma_miktari,hizsiniriasimorani,cezaorani)
 # ********************************************************************************************************************************************
-							
+							# print(ceza_tutar)
 							indirimli_ceza=float(ceza_tutar)*.75
 							
 # ********************************************************************************************************************************************
 							
-							hesaplanan_asma=asim_hesaplama(asma_miktari)
+							hesaplanan_asma=asim_hesaplama(asma_miktari,hizsiniriasimorani)
 							asma_miktari2.append(asma_miktari)
 							# print(pd.Series(asma_miktari2).unique())
 							ceza_tutar2.append(ceza_tutar)
