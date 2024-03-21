@@ -12,7 +12,7 @@ import datetime
 # araciletisim=input("Araç sahibinin mail adresini girin:")
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
-video = cv2.VideoCapture('traffic-mp4.mp4')
+video = cv2.VideoCapture('TEST_20SN.mp4')
 hizsiniriasimorani=list(veri["Hız Sınırı Aşım Oranı"])
 cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
@@ -265,15 +265,15 @@ def trackMultipleObjects():
 							# 		if carIDtoDelete[i]==ceza_yiyenler[j]:
 							# 			print("******************",i,"Ceza yedi")
 							# 			continue
-						cezalar2=cezalar.unique()
-						print(cezalar2)
-						ceza_liste.append(cezalar2)
-						ceza_liste2=pd.Series(ceza_liste)
-						# time.sleep(5)
+								cezalar2=cezalar.unique()
+								print(cezalar2)
+								ceza_liste.append(cezalar2)
+								ceza_liste2=pd.Series(ceza_liste)
+								# time.sleep(5)
 						# with open("./kayitlar.txt","r+","UTF-8")as file:
 						# 	file.write(ceza_liste2)
-						ceza_liste2.to_excel("kayitlar.xlsx")
-						print(ceza_liste2)
+								ceza_liste2.to_excel("kayitlar.xlsx")
+						# print(ceza_liste2)
 		cv2.imshow('result', resultImage)
 		#Write the frame into the file 'output.avi'
 		#out.write(resultImage)
@@ -288,3 +288,17 @@ def trackMultipleObjects():
 # print(ceza_yiyenler)
 if __name__ == '__main__':
 	trackMultipleObjects()
+
+verikayit=pd.read_excel("kayitlar.xlsx")
+verikayit.pop("Unnamed: 0")
+verikayit.columns=["Degerler"]
+verikayit=pd.Series(verikayit["Degerler"]).unique()
+j=list()
+for i in veri:
+    vi=i.split()
+    j.append(vi)
+for i in j:
+    i[0]=i[0].replace("[","")
+    i[-1]=i[-1].replace("]","")
+    mail(i[0],i[1],i[2],i[3],i[4])
+	
