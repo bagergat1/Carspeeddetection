@@ -265,15 +265,6 @@ def trackMultipleObjects():
 							# 		if carIDtoDelete[i]==ceza_yiyenler[j]:
 							# 			print("******************",i,"Ceza yedi")
 							# 			continue
-								cezalar2=cezalar.unique()
-								print(cezalar2)
-								ceza_liste.append(cezalar2)
-								ceza_liste2=pd.Series(ceza_liste)
-								# time.sleep(5)
-						# with open("./kayitlar.txt","r+","UTF-8")as file:
-						# 	file.write(ceza_liste2)
-								ceza_liste2.to_excel("kayitlar.xlsx")
-						# print(ceza_liste2)
 		cv2.imshow('result', resultImage)
 		#Write the frame into the file 'output.avi'
 		#out.write(resultImage)
