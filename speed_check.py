@@ -7,8 +7,8 @@ import smtplib
 import pandas as pd
 import numpy as np
 import datetime
-
-
+import os
+import subprocess
 # araciletisim=input("Araç sahibinin mail adresini girin:")
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
@@ -280,16 +280,17 @@ def trackMultipleObjects():
 if __name__ == '__main__':
 	trackMultipleObjects()
 
-verikayit=pd.read_excel("kayitlar.xlsx")
-verikayit.pop("Unnamed: 0")
-verikayit.columns=["Degerler"]
-verikayit=pd.Series(verikayit["Degerler"]).unique()
-j=list()
-for i in veri:
-    vi=i.split()
-    j.append(vi)
-for i in j:
-    i[0]=i[0].replace("[","")
-    i[-1]=i[-1].replace("]","")
-    mail(i[0],i[1],i[2],i[3],i[4])
-	
+# verikayit=pd.read_excel("kayitlar.xlsx")
+# verikayit.pop("Unnamed: 0")
+# verikayit.columns=["Degerler"]
+# verikayit=pd.Series(verikayit["Degerler"]).unique()
+# j=list()
+# for i in veri:
+#     vi=i.split()
+#     j.append(vi)
+# for i in j:
+#     i[0]=i[0].replace("[","")
+#     i[-1]=i[-1].replace("]","")
+#     print(i)
+#     mail(i[0],i[1],i[2],i[3],i[4])
+subprocess.run(["python", "/home/bagergat/Desktop/yeni/mail_sending.py"])
