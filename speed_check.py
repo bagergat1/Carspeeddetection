@@ -9,10 +9,10 @@ import numpy as np
 import datetime
 import os
 import subprocess
-# araciletisim=input("Araç sahibinin mail adresini girin:")
+
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
-video = cv2.VideoCapture('TEST_20SN.mp4')
+video = cv2.VideoCapture('video.mp4')
 hizsiniriasimorani=list(veri["Hız Sınırı Aşım Oranı"])
 cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
@@ -64,6 +64,7 @@ def ceza_hesap(asma_miktari,hizsiniriasimorani,cezaorani):
 		if i==0:
 			break
 		i-=1
+		
 # *******************************************************************************************************************************************************
 		
 def asim_hesaplama(asma_miktari,hizsiniriasimorani):
