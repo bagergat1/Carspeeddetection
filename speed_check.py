@@ -18,7 +18,8 @@ cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
 WIDTH = 1280
 HEIGHT = 720
-yasal_hiz_siniri=50
+yasal_hiz_siniri=60
+cezalar2=pd.DataFrame()
 # ceza_yiyenler=list()
 # ceza_yiyenler2=list()
 hesaplanan_asma1=list()
@@ -78,13 +79,13 @@ def asim_hesaplama(asma_miktari,hizsiniriasimorani):
 
 # *************************************************************************************************************************************************	
 
-data = cv2.VideoCapture('/home/bagergat/Desktop/yeni/cars.mp4') 
-frames = data.get(cv2.CAP_PROP_FRAME_COUNT) 
-fps = data.get(cv2.CAP_PROP_FPS) 
-seconds = round(frames / fps) 
-video_time = datetime.timedelta(seconds=seconds) 
-print(f"duration in seconds: {seconds}") 
-print(f"video time: {video_time}") 
+# data = cv2.VideoCapture('/home/bagergat/Desktop/yeni/video.mp4') 
+# frames = data.get(cv2.CAP_PROP_FRAME_COUNT) 
+# fps = data.get(cv2.CAP_PROP_FPS) 
+# seconds = round(frames / fps) 
+# video_time = datetime.timedelta(seconds=seconds) 
+# print(f"duration in seconds: {seconds}") 
+# print(f"video time: {video_time}") 
 
 # *************************************************************************************************************************************************	
 
@@ -222,6 +223,7 @@ def trackMultipleObjects():
 						asma_miktari=format(((speed[i]*100)/yasal_hiz_siniri)-100,".2f")
 						
 						if speed[i]>=yasal_hiz_siniri:
+							# print(speed[i])
 							speed2[i]=format(speed[i],".2f")
 							speed2[i]=float(speed2[i])
 							# print(f"{carID} numarali aracin hizi {speed2[i]} \n % {asma_miktari} hiz sinirini asma tespit edildi")
@@ -259,6 +261,12 @@ def trackMultipleObjects():
 							if carID and speed2 and asma_miktari and ceza_tutar and hesaplanan_asma!=None:
 								my_dict=dict(carID=carID,speed2=speed2[i],asma=asma_miktari,ceza_tutar=ceza_tutar,hesaplanan_asma=hesaplanan_asma)
 								cezalar=pd.Series(my_dict)
+								# print(cezalar)
+								cezalar2[i]=cezalar
+								print(cezalar2)
+								cezalar2.to_excel("kayitlarx.xlsx")
+								# cezalar.to_excel("kayitlar.xlsx")
+								# print(len())
 							# print(my_dict)
 							# print(carIDtoDelete)
 							# for i in range(len(carIDtoDelete)):
@@ -278,9 +286,10 @@ def trackMultipleObjects():
 	
 	cv2.destroyAllWindows()
 # print(ceza_yiyenler)
+# print(cezalar2)
 if __name__ == '__main__':
 	trackMultipleObjects()
-
+# print(pd.Series(cezalar2).unique())
 # verikayit=pd.read_excel("kayitlar.xlsx")
 # verikayit.pop("Unnamed: 0")
 # verikayit.columns=["Degerler"]
@@ -294,4 +303,7 @@ if __name__ == '__main__':
 #     i[-1]=i[-1].replace("]","")
 #     print(i)
 #     mail(i[0],i[1],i[2],i[3],i[4])
+df=pd.read_excel("kayitlarx.xlsx")
+df.columns=[i for i in range(len(df.columns))]
+df.to_excel("kayitlarx.xlsx")
 subprocess.run(["python", "/home/bagergat/Desktop/yeni/mail_sending.py"])

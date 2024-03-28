@@ -4,10 +4,13 @@ import numpy as np
 import smtplib
 
 # %%
-veri=pd.read_excel("kayitlar.xlsx")
+veri=pd.read_excel("kayitlarx.xlsx")
 veri.pop("Unnamed: 0")
-veri.columns=["Degerler"]
-veri=pd.Series(veri["Degerler"]).unique()
+veri.set_index(veri[0],inplace=True)
+veri.pop(0)
+# veri.pop("Unnamed: 0")
+# veri.columns=["Degerler"]
+# veri=pd.Series(veri["Degerler"]).unique()
 
 # %%
 def mail(carID,speed2,asma,ceza_tutar,hesaplanan_asma):
@@ -24,14 +27,25 @@ def mail(carID,speed2,asma,ceza_tutar,hesaplanan_asma):
     server.sendmail(email,receiver_email,text)
     print("Ceza mail'i gönderilmiştir.")
 
+
+# for i in range(len(veri.columns)):
+#     mail(i[0],i[1],i[2],i[3],i[4])
+
+for i in range(1,len(veri.columns)):
+    carID=veri[i][0]
+    speed2=veri[i][1]
+    asma=veri[i][2]
+    ceza_tutar=veri[i][3]
+    hesaplanan_asma=veri[i][4]
+    mail(carID,speed2,asma,ceza_tutar,hesaplanan_asma)
 # %%
-j=list()
-for i in veri:
-    vi=i.split()
-    j.append(vi)
-for i in j:
-    i[0]=i[0].replace("[","")
-    i[-1]=i[-1].replace("]","")
-    mail(i[0],i[1],i[2],i[3],i[4])
+# for i in veri:
+#     vi=i.split()
+#     j.append(vi)
+# for i in j:
+#     i[0]=i[0].replace("[","")
+#     i[-1]=i[-1].replace("]","")
+#     mail(i[0],i[1],i[2],i[3],i[4])
 
-
+# for i in range(len(veri.columns)):
+    
