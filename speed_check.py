@@ -12,7 +12,7 @@ import subprocess
 
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
-video = cv2.VideoCapture('video.mp4')
+video = cv2.VideoCapture('testvideo.mp4')
 hizsiniriasimorani=list(veri["Hız Sınırı Aşım Oranı"])
 cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
@@ -37,8 +37,8 @@ def estimateSpeed(location1, location2):
 	ppm = 8
 	d_meters = d_pixels / ppm
 	#print("d_pixels=" + str(d_pixels), "d_meters=" + str(d_meters))
-	fps = 18
-	speed = d_meters * fps * 3.6
+	fps = 25
+	speed = d_meters * fps * 1.6
 	return speed
 
 #***********************************************************************************************************************************************
@@ -82,7 +82,7 @@ def asim_hesaplama(asma_miktari,hizsiniriasimorani):
 # data = cv2.VideoCapture('/home/bagergat/Desktop/yeni/video.mp4') 
 # frames = data.get(cv2.CAP_PROP_FRAME_COUNT) 
 # fps = data.get(cv2.CAP_PROP_FPS) 
-# seconds = round(frames / fps) 
+# seconds = round(frames / (fps+1)) 
 # video_time = datetime.timedelta(seconds=seconds) 
 # print(f"duration in seconds: {seconds}") 
 # print(f"video time: {video_time}") 
@@ -263,7 +263,7 @@ def trackMultipleObjects():
 								cezalar=pd.Series(my_dict)
 								# print(cezalar)
 								cezalar2[i]=cezalar
-								print(cezalar2)
+								# print(cezalar2)
 								cezalar2.to_excel("kayitlarx.xlsx")
 								# cezalar.to_excel("kayitlar.xlsx")
 								# print(len())
@@ -306,4 +306,4 @@ if __name__ == '__main__':
 df=pd.read_excel("kayitlarx.xlsx")
 df.columns=[i for i in range(len(df.columns))]
 df.to_excel("kayitlarx.xlsx")
-subprocess.run(["python", "/home/bagergat/Desktop/yeni/mail_sending.py"])
+subprocess.run(["python3","/home/bagergat/Desktop/Bitirme/mail_sending.py"])
