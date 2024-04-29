@@ -10,6 +10,7 @@ import datetime
 import os
 import subprocess
 
+
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
 video = cv2.VideoCapture('testvideo.mp4')
@@ -18,7 +19,7 @@ cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
 WIDTH = 1280
 HEIGHT = 720
-yasal_hiz_siniri=60
+yasal_hiz_siniri=20
 cezalar2=pd.DataFrame()
 # ceza_yiyenler=list()
 # ceza_yiyenler2=list()
@@ -307,3 +308,4 @@ df=pd.read_excel("kayitlarx.xlsx")
 df.columns=[i for i in range(len(df.columns))]
 df.to_excel("kayitlarx.xlsx")
 subprocess.run(["python3","/home/bagergat/Desktop/Bitirme/mail_sending.py"])
+import Graphs

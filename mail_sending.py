@@ -2,7 +2,6 @@
 import pandas as pd 
 import numpy as np
 import smtplib
-
 # %%
 veri=pd.read_excel("kayitlarx.xlsx")
 veri.pop("Unnamed: 0")
@@ -38,6 +37,8 @@ for i in range(1,len(veri.columns)):
     ceza_tutar=veri[i][3]
     hesaplanan_asma=veri[i][4]
     mail(carID,speed2,asma,ceza_tutar,hesaplanan_asma)
+
+
 # %%
 # for i in veri:
 #     vi=i.split()
