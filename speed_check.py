@@ -13,13 +13,13 @@ import subprocess
 
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
-video = cv2.VideoCapture('testvideo.mp4')
+video = cv2.VideoCapture('/home/bagergat/Desktop/Videos/deneme.mp4')
 hizsiniriasimorani=list(veri["Hız Sınırı Aşım Oranı"])
 cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
 WIDTH = 1280
 HEIGHT = 720
-yasal_hiz_siniri=20
+yasal_hiz_siniri=50
 cezalar2=pd.DataFrame()
 # ceza_yiyenler=list()
 # ceza_yiyenler2=list()
