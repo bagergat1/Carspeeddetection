@@ -19,7 +19,7 @@ cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
 WIDTH = 1280
 HEIGHT = 720
-yasal_hiz_siniri=50
+yasal_hiz_siniri=200
 cezalar2=pd.DataFrame()
 # ceza_yiyenler=list()
 # ceza_yiyenler2=list()
@@ -32,6 +32,7 @@ ceza_tutar2=list()
 ceza_tutar1=list()
 ceza_liste=list()
 ceza_liste2=list()
+ceza_yemeyenler=list()
 def estimateSpeed(location1, location2):
 	d_pixels = math.sqrt(math.pow(location2[0] - location1[0], 2) + math.pow(location2[1] - location1[1], 2))
 	# ppm = location2[2] / carWidht
@@ -87,6 +88,8 @@ def asim_hesaplama(asma_miktari,hizsiniriasimorani):
 # video_time = datetime.timedelta(seconds=seconds) 
 # print(f"duration in seconds: {seconds}") 
 # print(f"video time: {video_time}") 
+
+# def ceza_yemeyenler()
 
 # *************************************************************************************************************************************************	
 
@@ -275,6 +278,14 @@ def trackMultipleObjects():
 							# 		if carIDtoDelete[i]==ceza_yiyenler[j]:
 							# 			print("******************",i,"Ceza yedi")
 							# 			continue
+						elif speed[i]<yasal_hiz_siniri:
+							ceza_yemeyenler.append(speed[i])
+							ceza_yemeyenler2=pd.Series(ceza_yemeyenler).unique()
+							# ceza_yemeyenler2.to_excel("ceza_yemeyenler.xlsx")
+							# ceza_yemeyenler2[i].to_excel("x.xlsx")
+							pd.DataFrame(ceza_yemeyenler2).to_excel("ceza_almayan_araclar.xlsx")
+							
+
 		cv2.imshow('result', resultImage)
 		#Write the frame into the file 'output.avi'
 		#out.write(resultImage)
