@@ -180,7 +180,7 @@ def trackMultipleObjects():
 		
 
 				carLocation1[i] = [x2, y2, w2, h2]
-		
+				# print(list(carLocation1.values())[0][1])
 
 				if [x1, y1, w1, h1] != [x2, y2, w2, h2]:
 					if (speed[i] == None or speed[i] == 0) and y1 >= 275 and y1 <= 285:
@@ -197,8 +197,16 @@ def trackMultipleObjects():
 							speed2[i]=float(speed2[i])
 							ceza_tutar=ceza_hesap(asma_miktari,hizsiniriasimorani,cezaorani)
 							hesaplanan_asma=asim_hesaplama(asma_miktari,hizsiniriasimorani)
-							image = pyautogui.screenshot()
-							image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
+
+
+							for j in list(carLocation1.values()):
+								if j[1]<200 and j[1]>194:
+									image = pyautogui.screenshot()
+									image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
+								# print(j)
+
+
+							
 							if carID and speed2 and asma_miktari and ceza_tutar and hesaplanan_asma!=None:
 								my_dict=dict(carID=carID,speed2=speed2[i],asma=asma_miktari,ceza_tutar=ceza_tutar,hesaplanan_asma=hesaplanan_asma)
 								cezalar=pd.Series(my_dict)
