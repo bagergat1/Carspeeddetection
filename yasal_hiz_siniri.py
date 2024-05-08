@@ -1,0 +1,1 @@
+yasal_hiz_siniri=35

@@ -9,17 +9,17 @@ import numpy as np
 import datetime
 import os
 import subprocess
-
+from yasal_hiz_siniri import yasal_hiz_siniri 
 
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
-video = cv2.VideoCapture('/home/bagergat/Desktop/Videos/deneme.mp4')
+video = cv2.VideoCapture('./testvideo.mp4')
 hizsiniriasimorani=list(veri["Hız Sınırı Aşım Oranı"])
 cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
 WIDTH = 1280
 HEIGHT = 720
-yasal_hiz_siniri=200
+# yasal_hiz_siniri=60
 cezalar2=pd.DataFrame()
 # ceza_yiyenler=list()
 # ceza_yiyenler2=list()
@@ -278,7 +278,7 @@ def trackMultipleObjects():
 							# 		if carIDtoDelete[i]==ceza_yiyenler[j]:
 							# 			print("******************",i,"Ceza yedi")
 							# 			continue
-						elif speed[i]<yasal_hiz_siniri:
+						elif speed[i]<yasal_hiz_siniri and speed[i]!=0:
 							ceza_yemeyenler.append(speed[i])
 							ceza_yemeyenler2=pd.Series(ceza_yemeyenler).unique()
 							# ceza_yemeyenler2.to_excel("ceza_yemeyenler.xlsx")
@@ -320,3 +320,4 @@ df.columns=[i for i in range(len(df.columns))]
 df.to_excel("kayitlarx.xlsx")
 subprocess.run(["python3","/home/bagergat/Desktop/Bitirme/mail_sending.py"])
 import Graphs
+import Graphsforcarsnotfired
