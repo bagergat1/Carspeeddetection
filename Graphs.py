@@ -41,4 +41,4 @@ axes[1,1].pie([fiftyper,thirtyper,tenper],labels=mylabels,colors=["red","orange"
 
 plt.show(block=True)
 
-fig.savefig("SavedGraph.pdf")
+fig.savefig("Ceza_alanlar.pdf")

@@ -321,3 +321,4 @@ df.to_excel("kayitlarx.xlsx")
 subprocess.run(["python3","/home/bagergat/Desktop/Bitirme/mail_sending.py"])
 import Graphs
 import Graphsforcarsnotfired
+import pdfsendingbymail
