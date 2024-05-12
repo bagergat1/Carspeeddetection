@@ -11,6 +11,9 @@ import os
 import subprocess
 from yasal_hiz_siniri import yasal_hiz_siniri 
 import pyautogui
+from yasal_hiz_siniri import pixel1
+from yasal_hiz_siniri import pixel2
+from cropping import crop_image
 
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
@@ -32,6 +35,7 @@ ceza_tutar1=list()
 ceza_liste=list()
 ceza_liste2=list()
 ceza_yemeyenler=list()
+
 def estimateSpeed(location1, location2):
 	d_pixels = math.sqrt(math.pow(location2[0] - location1[0], 2) + math.pow(location2[1] - location1[1], 2))
 	# ppm = location2[2] / carWidht
@@ -111,7 +115,7 @@ def trackMultipleObjects():
 			carTracker.pop(carID, None)
 			carLocation1.pop(carID, None)
 			carLocation2.pop(carID, None)
-		
+			
 		if not (frameCounter % 10):
 			gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 			cars = carCascade.detectMultiScale(gray, 1.1, 13, 18, (24, 24))
@@ -174,6 +178,7 @@ def trackMultipleObjects():
 
 
 		for i in carLocation1.keys():	
+			
 			if frameCounter % 1 == 0:
 				[x1, y1, w1, h1] = carLocation1[i]
 				[x2, y2, w2, h2] = carLocation2[i]
@@ -200,9 +205,15 @@ def trackMultipleObjects():
 
 
 							for j in list(carLocation1.values()):
-								if j[1]<200 and j[1]>194:
+								if j[1]<pixel2 and j[1]>pixel1:
 									image = pyautogui.screenshot()
 									image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
+									
+									input_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
+									output_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
+									crop_box = (300, 100, 1100, 800) 
+									crop_image(input_image_path, output_image_path, crop_box)
+									subprocess.run(["python3","/home/bagergat/Desktop/Bitirme/graphpersec.py"])
 								# print(j)
 
 
@@ -222,8 +233,7 @@ def trackMultipleObjects():
 
 		cv2.imshow('result', resultImage)
 		
-
-
+		
 		if cv2.waitKey(33) == 27:
 			break
 
