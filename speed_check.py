@@ -14,7 +14,7 @@ import pyautogui
 from yasal_hiz_siniri import pixel1
 from yasal_hiz_siniri import pixel2
 from cropping import crop_image
-
+from datetime import datetime
 
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
@@ -24,6 +24,7 @@ cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
 WIDTH = 1280
 HEIGHT = 720
+now=datetime.now()
 
 cezalar2=pd.DataFrame()
 hesaplanan_asma1=list()
@@ -46,19 +47,19 @@ def estimateSpeed(location1, location2):
 	speed = d_meters * fps * 1.6
 	return speed
 
-def mail(carID,speed2,asma,ceza_tutar,hesaplanan_asma):
-    email="birkullanicix@gmail.com"
-    receiver_email="birkullanicix@gmail.com"
-    subject="Hiz siniri asma cezasi"
-    message=f"""        {carID} numarali arac {speed2} Km/h ile hiz sinirini %{asma} oraninda asmistir.
-	{carID} numarali aracin hiz sinirini %{hesaplanan_asma}'den fazla astigi tespit edildiginden dolayi cezai islem uygulanmistir.
-	Yazilan ceza tutari:{ceza_tutar} TL."""
-    text=f"Subject:{subject}\n\n{message}"
-    server=smtplib.SMTP("smtp.gmail.com",587)
-    server.starttls()
-    server.login(email,"wrrt pxqr pyib nzcs")
-    server.sendmail(email,receiver_email,text)
-    print("Ceza mail'i gönderilmiştir.")
+# def mail(carID,speed2,asma,ceza_tutar,hesaplanan_asma):
+#     email="birkullanicix@gmail.com"
+#     receiver_email="birkullanicix@gmail.com"
+#     subject="Hiz siniri asma cezasi"
+#     message=f"""        {carID} numarali arac {speed2} Km/h ile hiz sinirini %{asma} oraninda asmistir.
+# 	{carID} numarali aracin hiz sinirini %{hesaplanan_asma}'den fazla astigi tespit edildiginden dolayi cezai islem uygulanmistir.
+# 	Yazilan ceza tutari:{ceza_tutar} TL."""
+#     text=f"Subject:{subject}\n\n{message}"
+#     server=smtplib.SMTP("smtp.gmail.com",587)
+#     server.starttls()
+#     server.login(email,"wrrt pxqr pyib nzcs")
+#     server.sendmail(email,receiver_email,text)
+#     print("Ceza mail'i gönderilmiştir.")
 
 def ceza_hesap(asma_miktari,hizsiniriasimorani,cezaorani):
 	i=len(hizsiniriasimorani)-1
@@ -92,9 +93,8 @@ def trackMultipleObjects():
 	speed2 = [None] * 1000
 	out = cv2.VideoWriter('outpy.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (WIDTH,HEIGHT))
 
-
+	constant=1
 	while True:
-		
 		start_time = time.time()
 		rc, image = video.read()
 		if type(image) == type(None):
@@ -176,7 +176,12 @@ def trackMultipleObjects():
 		if not (end_time == start_time):
 			fps = 1.0/(end_time - start_time)
 		
-
+		now2=datetime.now()
+		if now2.minute-now.minute==1*constant:
+			import sendto_virtual_system
+			constant+=1
+			print("Excel dosyası sanal sisteme gönderilmiştir.")
+        	
 
 
 		for i in carLocation1.keys():	
@@ -228,8 +233,7 @@ def trackMultipleObjects():
 							pd.DataFrame(ceza_yemeyenler2).to_excel("ceza_almayan_araclar.xlsx")
 
 		cv2.imshow('result', resultImage)
-		
-		
+
 		if cv2.waitKey(33) == 27:
 			break
 	
