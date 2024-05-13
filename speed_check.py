@@ -15,6 +15,7 @@ from yasal_hiz_siniri import pixel1
 from yasal_hiz_siniri import pixel2
 from cropping import crop_image
 
+
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
 video = cv2.VideoCapture('./testvideo.mp4')
@@ -93,6 +94,7 @@ def trackMultipleObjects():
 
 
 	while True:
+		
 		start_time = time.time()
 		rc, image = video.read()
 		if type(image) == type(None):
@@ -182,8 +184,6 @@ def trackMultipleObjects():
 			if frameCounter % 1 == 0:
 				[x1, y1, w1, h1] = carLocation1[i]
 				[x2, y2, w2, h2] = carLocation2[i]
-		
-
 				carLocation1[i] = [x2, y2, w2, h2]
 				# print(list(carLocation1.values())[0][1])
 
@@ -193,7 +193,7 @@ def trackMultipleObjects():
 
 
 					if speed[i] != None and y1 >= 180:
-						cv2.putText(resultImage, str(int(speed[i])) + " km/hr", (int(x1 + w1/2), int(y1-5)),cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2)
+						cv2.putText(resultImage, str(int(speed[i])) + " kmh", (int(x1 + w1/2), int(y1-5)),cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2)
 					
 						asma_miktari=format(((speed[i]*100)/yasal_hiz_siniri)-100,".2f")
 						
@@ -202,7 +202,6 @@ def trackMultipleObjects():
 							speed2[i]=float(speed2[i])
 							ceza_tutar=ceza_hesap(asma_miktari,hizsiniriasimorani,cezaorani)
 							hesaplanan_asma=asim_hesaplama(asma_miktari,hizsiniriasimorani)
-
 
 							for j in list(carLocation1.values()):
 								if j[1]<pixel2 and j[1]>pixel1:
@@ -213,10 +212,8 @@ def trackMultipleObjects():
 									output_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
 									crop_box = (300, 100, 1100, 800) 
 									crop_image(input_image_path, output_image_path, crop_box)
-									subprocess.run(["python3","/home/bagergat/Desktop/Bitirme/graphpersec.py"])
-								# print(j)
 
-
+									
 							
 							if carID and speed2 and asma_miktari and ceza_tutar and hesaplanan_asma!=None:
 								my_dict=dict(carID=carID,speed2=speed2[i],asma=asma_miktari,ceza_tutar=ceza_tutar,hesaplanan_asma=hesaplanan_asma)
@@ -229,15 +226,12 @@ def trackMultipleObjects():
 							ceza_yemeyenler.append(speed[i])
 							ceza_yemeyenler2=pd.Series(ceza_yemeyenler).unique()
 							pd.DataFrame(ceza_yemeyenler2).to_excel("ceza_almayan_araclar.xlsx")
-							
 
 		cv2.imshow('result', resultImage)
 		
 		
 		if cv2.waitKey(33) == 27:
 			break
-
-		
 	
 	cv2.destroyAllWindows()
 if __name__ == '__main__':
