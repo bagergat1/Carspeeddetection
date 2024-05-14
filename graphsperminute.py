@@ -75,10 +75,10 @@ while True:
     simdi2=datetime.now()
     if simdi2.minute-simdi.minute==x:
         print(f"{x}. grafik olusturuldu")
-        inf=pd.read_excel("kayitlarx.xlsx")
+        inf=pd.read_excel("./kayitlarx.xlsx")
         inf.pop("Unnamed: 0")
         inf.pop(0)
-        inf.to_excel("graphsperminute.xlsx")
-        inf = pd.read_excel("graphsperminute.xlsx")
+        inf.to_excel("./graphsperminute.xlsx")
+        inf = pd.read_excel("./graphsperminute.xlsx")
         create_graph(inf)
         x+=1
