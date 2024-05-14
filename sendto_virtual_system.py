@@ -18,8 +18,8 @@ message["Subject"] = subject
 message.attach(MIMEText(body, "plain"))
 inf=pd.read_excel("./kayitlarx.xlsx")
 inf.drop("Unnamed: 0",axis=1,inplace=True)
-inf.to_excel("./graphsperminute.xlsx")
-file_path = "./graphsperminute.xlsx"
+inf.to_excel("../graphsperminute.xlsx")
+file_path = "../graphsperminute.xlsx"
 with open(file_path, "rb") as attachment:
     part = MIMEBase("application", "octet-stream")
     part.set_payload(attachment.read()) 

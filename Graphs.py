@@ -5,9 +5,6 @@ import matplotlib.pyplot as plt
 inf=pd.read_excel("kayitlarx.xlsx")
 inf.pop("Unnamed: 0")
 inf.drop(0,axis=1,inplace=True)
-
-
-
 fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15, 12))
 fig.tight_layout() # Or equivalently,  "plt.tight_layout()"
 plt.subplots_adjust(hspace=0.2, wspace=0.2)
