@@ -211,6 +211,7 @@ def trackMultipleObjects():
 				send(part,sender_email,receiver_email,body)
 				constant+=1
 				print("Excel dosyası sanal sisteme gönderilmiştir.")
+				# constant+=1
 		
 		end_time = time.time()
 		
