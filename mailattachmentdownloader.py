@@ -3,7 +3,7 @@ import imaplib
 import os
 
 # Directory where attachments will be saved
-detach_dir = '/home/bagergat/Desktop/deneme/'
+detach_dir = '/home/bager/Desktop/bitirme/Bitirme'
 
 # Gmail account credentials
 user = "birkullanicix@gmail.com"

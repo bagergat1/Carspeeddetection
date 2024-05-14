@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import time
 from datetime import datetime
-
+import os
 def create_graph(inf):
     root = tk.Tk()
     root.withdraw()
@@ -66,19 +66,23 @@ def create_graph(inf):
         root.destroy()  # Add this line to terminate the loop
 
     # Close the window after 45 seconds
-    root.after(55000, close_window)
+    root.after(85000, close_window)
     root.mainloop()
 simdi=datetime.now()
 x=1
+file="./kayitlar.xlsx"
 while True:
-    import mailattachmentdownloader
     simdi2=datetime.now()
     if simdi2.minute-simdi.minute==x:
-        print(f"{x}. grafik olusturuldu")
-        inf=pd.read_excel("kayitlarx.xlsx")
-        inf.pop("Unnamed: 0")
-        inf.pop(0)
-        inf.to_excel("graphsperminute.xlsx")
-        inf = pd.read_excel("graphsperminute.xlsx")
+        import mailattachmentdownloader
+        # print(f"{x}. grafik olusturuldu")
+        # inf=pd.read_excel("./kayitlarx.xlsx")
+        # inf.pop("Unnamed: 0")
+        # inf.pop(0)
+        # inf.to_excel("./graphsperminute.xlsx")
+        inf = pd.read_excel("../graphsperminute.xlsx")
+        # inf.pop("Unnamed: 0")
+        # inf.pop(0)
         create_graph(inf)
         x+=1
+        # os.remove("./graphsperminute.xlsx")
