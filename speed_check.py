@@ -18,7 +18,7 @@ from datetime import datetime
 
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
-video = cv2.VideoCapture('./testvideo.mp4')
+video = cv2.VideoCapture('../Videos/deneme.mp4')
 hizsiniriasimorani=list(veri["Hız Sınırı Aşım Oranı"])
 cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
@@ -37,6 +37,41 @@ ceza_tutar1=list()
 ceza_liste=list()
 ceza_liste2=list()
 ceza_yemeyenler=list()
+# *************************************************************************************
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+from datetime import datetime
+sender_email = "birkullanicix@gmail.com"
+receiver_email = "birkullanicix@gmail.com"
+subject = ""
+body = ""
+message = MIMEMultipart()
+message["From"] = sender_email
+message["To"] = receiver_email
+message["Subject"] = subject
+message.attach(MIMEText(body, "plain"))
+
+file_path = "./kayitlarx.xlsx"
+with open(file_path, "rb") as attachment:
+    part = MIMEBase("application", "octet-stream")
+    part.set_payload(attachment.read()) 
+encoders.encode_base64(part)
+part.add_header(
+    "Content-Disposition",
+    f"attachment; filename= {file_path}",
+)
+def send(part,sender_email,receiver_email,text):
+	message.attach(part)
+	text = message.as_string()
+	server=smtplib.SMTP("smtp.gmail.com",587)
+	server.starttls()
+	server.login(sender_email,"wrrt pxqr pyib nzcs")
+	server.sendmail(sender_email,receiver_email,text)
+
+# *************************************************************************************
 
 def estimateSpeed(location1, location2):
 	d_pixels = math.sqrt(math.pow(location2[0] - location1[0], 2) + math.pow(location2[1] - location1[1], 2))
@@ -170,19 +205,17 @@ def trackMultipleObjects():
 			cv2.rectangle(resultImage, (t_x, t_y), (t_x + t_w, t_y + t_h), rectangleColor, 4)
 			
 			carLocation2[carID] = [t_x, t_y, t_w, t_h]
+			now2=datetime.now()
+			if now2.minute-now.minute==1*constant:
+				print(now2.minute-now.minute)
+				send(part,sender_email,receiver_email,body)
+				constant+=1
+				print("Excel dosyası sanal sisteme gönderilmiştir.")
 		
 		end_time = time.time()
 		
 		if not (end_time == start_time):
 			fps = 1.0/(end_time - start_time)
-		
-		now2=datetime.now()
-		if now2.minute-now.minute==1*constant:
-			import sendto_virtual_system
-			constant+=1
-			print("Excel dosyası sanal sisteme gönderilmiştir.")
-        	
-
 
 		for i in carLocation1.keys():	
 			
@@ -196,7 +229,7 @@ def trackMultipleObjects():
 					if (speed[i] == None or speed[i] == 0) and y1 >= 275 and y1 <= 285:
 						speed[i] = estimateSpeed([x1, y1, w1, h1], [x2, y2, w2, h2])
 
-
+					
 					if speed[i] != None and y1 >= 180:
 						cv2.putText(resultImage, str(int(speed[i])) + " kmh", (int(x1 + w1/2), int(y1-5)),cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2)
 					
@@ -217,7 +250,7 @@ def trackMultipleObjects():
 									output_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
 									crop_box = (300, 100, 1100, 800) 
 									crop_image(input_image_path, output_image_path, crop_box)
-
+									
 									
 							
 							if carID and speed2 and asma_miktari and ceza_tutar and hesaplanan_asma!=None:
@@ -226,12 +259,12 @@ def trackMultipleObjects():
 								cezalar2[i]=cezalar
 								
 								cezalar2.to_excel("kayitlarx.xlsx")
+								# cezalar2.to_excel("graphsperminute.xlsx")
 								
 						elif speed[i]<yasal_hiz_siniri and speed[i]!=0:
 							ceza_yemeyenler.append(speed[i])
 							ceza_yemeyenler2=pd.Series(ceza_yemeyenler).unique()
 							pd.DataFrame(ceza_yemeyenler2).to_excel("ceza_almayan_araclar.xlsx")
-
 		cv2.imshow('result', resultImage)
 
 		if cv2.waitKey(33) == 27:
