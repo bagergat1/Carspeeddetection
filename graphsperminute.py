@@ -6,6 +6,79 @@ import numpy as np
 import time
 from datetime import datetime
 import os
+import subprocess
+# import email
+# import imaplib
+# import os
+# def excelreceiver():
+
+#     # Directory where attachments will be saved
+#     detach_dir = '/home/bager/Desktop/'
+
+#     # Gmail account credentials
+#     user = "birkullanicix@gmail.com"
+#     pwd = "wrrt pxqr pyib nzcs"
+
+#     # Connecting to the Gmail IMAP server
+#     m = imaplib.IMAP4_SSL("imap.gmail.com", 993)
+
+#     # Login to the Gmail account
+#     m.login(user, pwd)
+
+#     # Select the INBOX mailbox
+#     m.select("INBOX")
+
+#     # Search for unread emails with attachments
+#     resp, items = m.search(None, 'UNSEEN', 'X-GM-RAW', 'has:attachment')
+
+#     # Getting the mail IDs
+#     items = items[0].split()
+
+#     # Loop through the emails
+#     for email_id in items:
+#         # Fetching the email
+#         resp, data = m.fetch(email_id, "(RFC822)")
+#         email_body = data[0][1]
+
+#         # Parsing the email content to get a mail object
+#         mail = email.message_from_bytes(email_body)
+
+#         # Check if any attachments exist
+#         if mail.get_content_maintype() != 'multipart':
+#             continue
+
+#         # Loop through the parts of the email
+#         for part in mail.walk():
+#             # Check if the part is an attachment
+#             if part.get_content_maintype() == 'multipart':
+#                 continue
+#             if part.get('Content-Disposition') is None:
+#                 continue
+
+#             # Check if the attachment is an Excel file
+#             if part.get_filename().endswith('.xls') or part.get_filename().endswith('.xlsx'):
+#                 filename = part.get_filename()
+
+#                 # Construct the file path to save the attachment
+#                 att_path = os.path.join(detach_dir, filename)
+
+#                 # Check if the file already exists
+#                 if not os.path.isfile(att_path):
+#                     # Write the attachment to the file
+#                     with open(att_path, 'wb') as fp:
+#                         fp.write(part.get_payload(decode=True))
+
+#     # Close the mailbox
+#     m.close()
+
+#     # Logout from the Gmail account
+#     m.logout()
+
+
+
+
+
+
 def create_graph(inf):
     root = tk.Tk()
     root.withdraw()
@@ -20,11 +93,6 @@ def create_graph(inf):
 
     small_window = tk.Toplevel(root)
     small_window.geometry(f"{small_window_width}x{small_window_height}+{small_window_x}+{small_window_y}")
-    # fig, ax = plt.subplots()
-    # ax.bar([i for i in range(len(np.array(inf.iloc[1])))], np.array(inf.iloc[1]), color="red")
-    # ax.set_title('Grafik Başlığı')
-    # ax.set_xlabel('X Ekseni')
-    # ax.set_ylabel('Y Ekseni')
 
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15, 12))
     fig.tight_layout() # Or equivalently,  "plt.tight_layout()"
@@ -66,20 +134,23 @@ def create_graph(inf):
         root.destroy()  # Add this line to terminate the loop
 
     # Close the window after 45 seconds
-    root.after(85000, close_window)
+    root.after(120000, close_window)
     root.mainloop()
 simdi=datetime.now()
 x=1
-file="./kayitlar.xlsx"
+# myfile="/home/bager/Desktop/kayitlarx.xlsx"
 while True:
     simdi2=datetime.now()
-    if simdi2.minute-simdi.minute==x:
-        print(f"{x}. grafik olusturuldu")
-        inf=pd.read_excel("./kayitlarx.xlsx")
-        inf.pop("Unnamed: 0")
-        inf.pop(0)
-        inf.to_excel("./graphsperminute.xlsx")
-        inf = pd.read_excel("./graphsperminute.xlsx")
-        create_graph(inf)
-        x+=1
-        # os.remove("./graphsperminute.xlsx")
+    subprocess.run(["python3","./mailattachmentdownloader.py"])
+    time.sleep(5)
+    # print(f"{x}. grafik olusturuldu")
+    # inf=pd.read_excel("../graphsperminute.xlsx")
+    inf = pd.read_excel("/home/bager/Desktop/kayitlarx.xlsx")
+    # inf.pop("Unnamed: 0",inplace=True)
+    inf.drop("Unnamed: 0",axis=1,inplace=True)
+    # inf.to_excel("./graphsperminute.xlsx"
+    create_graph(inf)
+    x+=1
+    os.remove("/home/bager/Desktop/kayitlarx.xlsx")
+            
+    
