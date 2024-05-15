@@ -5,8 +5,15 @@ import pandas as pd
 import numpy as np
 import time
 from datetime import datetime
-
-def create_graph(inf):
+import os
+import shutil
+move="/home/bagergat/Desktop/Bitirme/used_files/"
+file="/home/bagergat/Desktop/graphsperminute.xlsx"
+data=pd.read_excel("/home/bagergat/Desktop/graphsperminute.xlsx")
+data.drop("Unnamed: 0",axis=1,inplace=True)
+data.to_excel("/home/bagergat/Desktop/graphsperminute.xlsx")
+# print(type(inf))
+def create_graph(inf,file,move):
     root = tk.Tk()
     root.withdraw()
 
@@ -29,7 +36,7 @@ def create_graph(inf):
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15, 12))
     fig.tight_layout() # Or equivalently,  "plt.tight_layout()"
     plt.subplots_adjust(hspace=0.2, wspace=0.2)
-    axes[0,0].bar([i for i in range(len(np.array(inf.iloc[1])))],np.array(inf.iloc[1]),color="red")
+    axes[0,0].bar([i for i in range(len(np.array(inf.iloc[0])))],np.array(inf.iloc[0]),color="red")
     axes[0,0].set_xlabel("Araç No")
     axes[0,0].set_ylabel("Araçların Hızı")
     axes[0,0].set_title("Araçların Hız Grafikleri")
@@ -66,19 +73,34 @@ def create_graph(inf):
         root.destroy()  # Add this line to terminate the loop
 
     # Close the window after 45 seconds
-    root.after(55000, close_window)
-    root.mainloop()
-simdi=datetime.now()
-x=1
+    if file:
+        os.remove(f"{move}"+"graphsperminute.xlsx")
+        shutil.move(f"{file}",f"{move}")
+        
+        root.after(55000, close_window)
+        root.mainloop()
+# simdi=datetime.now()
+# x=1
+# file="/home/bagergat/Desktop/graphsperminute.xlsx"
 while True:
+    # while file not in os.listdir("/home/bagergat/Desktop/"):
     import mailattachmentdownloader
-    simdi2=datetime.now()
-    if simdi2.minute-simdi.minute==x:
-        print(f"{x}. grafik olusturuldu")
-        inf=pd.read_excel('/home/bager/Desktop/graphsperminute.xlsx')
+        # break
+    inf=pd.read_excel("/home/bagergat/Desktop/graphsperminute.xlsx")
+    create_graph(f"{move}graphsperminute.xlsx",file,move)
+    
+    
+    # x+=1
+    # os.remove(file)
+    # print("2.döngü")
+# while True:
+#     # import mailattachmentdownloader
+#     simdi2=datetime.now()
+    # if simdi2.minute-simdi.minute==x:
+        # print(f"{x}. grafik olusturuldu")
+        
         # inf.pop("Unnamed: 0")
         # inf.pop(0)
         # inf.to_excel("./graphsperminute.xlsx")
         # inf = pd.read_excel("./graphsperminute.xlsx")
-        create_graph(inf)
-        x+=1
+        
