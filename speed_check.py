@@ -236,7 +236,7 @@ def trackMultipleObjects():
 					
 			
 			now2=datetime.now()
-			if now2.minute-now.minute==1*constant:
+			if now2.minute-now.minute==0.5*constant:
 				print(now2.minute-now.minute)
 				send(part,sender_email,receiver_email,body)
 				constant+=1

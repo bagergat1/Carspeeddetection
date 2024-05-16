@@ -3,6 +3,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+import os
+emptyfile=list()
+import pandas as pd
 sender_email = "birkullanicix@gmail.com"
 receiver_email = "birkullanicix@gmail.com"
 subject = "Ceza Alan Araçların Verileri"
@@ -29,3 +32,6 @@ server.starttls()
 server.login(sender_email,"wrrt pxqr pyib nzcs")
 server.sendmail(sender_email,receiver_email,text)
 print("PDF gönderilmiştir.")
+os.remove("./used_files/yenikayit.xlsx")
+emptyfile=pd.DataFrame(emptyfile)
+emptyfile.to_excel("./used_files/yenikayit.xlsx")
