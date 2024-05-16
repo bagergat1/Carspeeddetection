@@ -3,7 +3,7 @@ import imaplib
 import os
 
 # Directory where attachments will be saved
-detach_dir = '/home/bagergat/Desktop/Bitirme/used_files/'
+detach_dir = './used_files/'
 
 # Gmail account credentials
 user = "birkullanicix@gmail.com"
@@ -48,6 +48,7 @@ for email_id in items:
         # Check if the attachment is an Excel file
         if part.get_filename().endswith('.xls') or part.get_filename().endswith('.xlsx'):
             filename = part.get_filename()
+            # print(filename)
 
             # Construct the file path to save the attachment
             att_path = os.path.join(detach_dir, filename)

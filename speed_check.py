@@ -18,6 +18,13 @@ from datetime import datetime
 import shutil
 from yasal_hiz_siniri import video
 from yasal_hiz_siniri import crop_box
+# import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+from datetime import datetime
+
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
 # video = cv2.VideoCapture('./testvideo.mp4')
@@ -40,12 +47,7 @@ ceza_liste=list()
 ceza_liste2=list()
 ceza_yemeyenler=list()
 # *************************************************************************************
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
-from datetime import datetime
+
 # sender_email = "birkullanicix@gmail.com"
 # receiver_email = "birkullanicix@gmail.com"
 # subject = ""
@@ -217,7 +219,7 @@ def trackMultipleObjects():
 			message["To"] = receiver_email
 			message["Subject"] = subject
 			message.attach(MIMEText(body, "plain"))
-			file_path = "./yenikayit.xlsx"
+			file_path = "yenikayit.xlsx"
 			with open(file_path, "rb") as attachment:
 				part = MIMEBase("application", "octet-stream")
 				part.set_payload(attachment.read()) 
@@ -226,6 +228,7 @@ def trackMultipleObjects():
 			    "Content-Disposition",
 			    f"attachment; filename= {file_path}",
 			)
+			# print(file_path)
 			def send(part,sender_email,receiver_email,text):
 				message.attach(part)
 				text = message.as_string()
@@ -233,10 +236,9 @@ def trackMultipleObjects():
 				server.starttls()
 				server.login(sender_email,"wrrt pxqr pyib nzcs")
 				server.sendmail(sender_email,receiver_email,text)
-					
-			
+
 			now2=datetime.now()
-			if now2.minute-now.minute==0.5*constant:
+			if now2.minute-now.minute==1*constant:
 				print(now2.minute-now.minute)
 				send(part,sender_email,receiver_email,body)
 				constant+=1
@@ -292,7 +294,7 @@ def trackMultipleObjects():
 								cezalar=pd.Series(my_dict)
 								cezalar2[i]=cezalar
 								
-								cezalar2.to_excel("kayitlarx.xlsx")
+								cezalar2.to_excel("./kayitlarx.xlsx")
 								os.remove("./yenikayit.xlsx")
 								shutil.copy("./kayitlarx.xlsx","./yenikayit.xlsx")
 								# cezalar2.to_excel("graphsperminute.xlsx")
