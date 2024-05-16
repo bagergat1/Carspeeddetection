@@ -2,13 +2,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-inf=pd.read_excel("kayitlarx.xlsx")
+inf=pd.read_excel("./kayitlarx.xlsx")
 inf.pop("Unnamed: 0")
-inf.drop(0,axis=1,inplace=True)
+inf=inf.set_index(0)
+# inf.drop(0,axis=1,inplace=True)
 fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15, 12))
 fig.tight_layout() # Or equivalently,  "plt.tight_layout()"
 plt.subplots_adjust(hspace=0.2, wspace=0.2)
-axes[0,0].bar([i for i in range(len(np.array(inf.iloc[1])))],np.array(inf.iloc[1]),color="red")
+axes[0,0].bar([i for i in range(len(np.array(inf.iloc[2])))],np.array(inf.iloc[1]),color="red")
 axes[0,0].set_xlabel("Araç No")
 axes[0,0].set_ylabel("Araçların Hızı")
 axes[0,0].set_title("Araçların Hız Grafikleri")
@@ -26,7 +27,7 @@ axes[1,0].set_title("Araçlara Kesilen Ceza Tutarı")
 fiftyper=0
 thirtyper=0
 tenper=0
-for i in np.array(inf.loc[4]):
+for i in np.array(inf.iloc[4]):
     if i==50:
         fiftyper+=1
     elif i==30:

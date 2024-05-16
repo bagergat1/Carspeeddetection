@@ -15,10 +15,12 @@ from yasal_hiz_siniri import pixel1
 from yasal_hiz_siniri import pixel2
 from cropping import crop_image
 from datetime import datetime
-
+import shutil
+from yasal_hiz_siniri import video
+from yasal_hiz_siniri import crop_box
 veri=pd.read_excel("ceza_hesap.xlsx")
 carCascade = cv2.CascadeClassifier('myhaar.xml')
-video = cv2.VideoCapture('../Videos/deneme.mp4')
+# video = cv2.VideoCapture('./testvideo.mp4')
 hizsiniriasimorani=list(veri["Hız Sınırı Aşım Oranı"])
 cezaorani=list(veri["Ceza Tutarı"])
 mesaj=list()
@@ -44,32 +46,34 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 from datetime import datetime
-sender_email = "birkullanicix@gmail.com"
-receiver_email = "birkullanicix@gmail.com"
-subject = ""
-body = ""
-message = MIMEMultipart()
-message["From"] = sender_email
-message["To"] = receiver_email
-message["Subject"] = subject
-message.attach(MIMEText(body, "plain"))
+# sender_email = "birkullanicix@gmail.com"
+# receiver_email = "birkullanicix@gmail.com"
+# subject = ""
+# body = ""
+# message = MIMEMultipart()
+# message["From"] = sender_email
+# message["To"] = receiver_email
+# message["Subject"] = subject
+# message.attach(MIMEText(body, "plain"))
+# data=pd.read_excel("./kayitlarx.xlsx")
+# data.to_excel("./yenikayit.xlsx")
 
-file_path = "./kayitlarx.xlsx"
-with open(file_path, "rb") as attachment:
-    part = MIMEBase("application", "octet-stream")
-    part.set_payload(attachment.read()) 
-encoders.encode_base64(part)
-part.add_header(
-    "Content-Disposition",
-    f"attachment; filename= {file_path}",
-)
-def send(part,sender_email,receiver_email,text):
-	message.attach(part)
-	text = message.as_string()
-	server=smtplib.SMTP("smtp.gmail.com",587)
-	server.starttls()
-	server.login(sender_email,"wrrt pxqr pyib nzcs")
-	server.sendmail(sender_email,receiver_email,text)
+# file_path = "./yenikayit.xlsx"
+# with open(file_path, "rb") as attachment:
+#     part = MIMEBase("application", "octet-stream")
+#     part.set_payload(attachment.read()) 
+# encoders.encode_base64(part)
+# part.add_header(
+#     "Content-Disposition",
+#     f"attachment; filename= {file_path}",
+# )
+# def send(part,sender_email,receiver_email,text):
+# 	message.attach(part)
+# 	text = message.as_string()
+# 	server=smtplib.SMTP("smtp.gmail.com",587)
+# 	server.starttls()
+# 	server.login(sender_email,"wrrt pxqr pyib nzcs")
+# 	server.sendmail(sender_email,receiver_email,text)
 
 # *************************************************************************************
 
@@ -203,15 +207,41 @@ def trackMultipleObjects():
 			t_h = int(trackedPosition.height())
 			
 			cv2.rectangle(resultImage, (t_x, t_y), (t_x + t_w, t_y + t_h), rectangleColor, 4)
-			
 			carLocation2[carID] = [t_x, t_y, t_w, t_h]
+			sender_email = "birkullanicix@gmail.com"
+			receiver_email = "birkullanicix@gmail.com"
+			subject = ""
+			body = ""
+			message = MIMEMultipart()
+			message["From"] = sender_email
+			message["To"] = receiver_email
+			message["Subject"] = subject
+			message.attach(MIMEText(body, "plain"))
+			file_path = "./yenikayit.xlsx"
+			with open(file_path, "rb") as attachment:
+				part = MIMEBase("application", "octet-stream")
+				part.set_payload(attachment.read()) 
+			encoders.encode_base64(part)
+			part.add_header(
+			    "Content-Disposition",
+			    f"attachment; filename= {file_path}",
+			)
+			def send(part,sender_email,receiver_email,text):
+				message.attach(part)
+				text = message.as_string()
+				server=smtplib.SMTP("smtp.gmail.com",587)
+				server.starttls()
+				server.login(sender_email,"wrrt pxqr pyib nzcs")
+				server.sendmail(sender_email,receiver_email,text)
+					
+			
 			now2=datetime.now()
 			if now2.minute-now.minute==1*constant:
 				print(now2.minute-now.minute)
 				send(part,sender_email,receiver_email,body)
 				constant+=1
 				print("Excel dosyası sanal sisteme gönderilmiştir.")
-				# constant+=1
+				
 		
 		end_time = time.time()
 		
@@ -249,8 +279,11 @@ def trackMultipleObjects():
 									
 									input_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
 									output_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
-									crop_box = (300, 100, 1100, 800) 
+									# crop_box = (300, 100, 1100, 800) 
 									crop_image(input_image_path, output_image_path, crop_box)
+
+									# crop_image(input_image_pat
+									# print(video.__qualname__)h, output_image_path, crop_box)
 									
 									
 							
@@ -260,6 +293,8 @@ def trackMultipleObjects():
 								cezalar2[i]=cezalar
 								
 								cezalar2.to_excel("kayitlarx.xlsx")
+								os.remove("./yenikayit.xlsx")
+								shutil.copy("./kayitlarx.xlsx","./yenikayit.xlsx")
 								# cezalar2.to_excel("graphsperminute.xlsx")
 								
 						elif speed[i]<yasal_hiz_siniri and speed[i]!=0:

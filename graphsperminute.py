@@ -8,12 +8,10 @@ from datetime import datetime
 import os
 import shutil
 move="/home/bagergat/Desktop/Bitirme/used_files/"
-file="/home/bagergat/Desktop/graphsperminute.xlsx"
-data=pd.read_excel("/home/bagergat/Desktop/graphsperminute.xlsx")
-data.drop("Unnamed: 0",axis=1,inplace=True)
-data.to_excel("/home/bagergat/Desktop/graphsperminute.xlsx")
-# print(type(inf))
-def create_graph(inf,file,move):
+file="yenikayit.xlsx"
+
+
+def create_graph(inf):
     root = tk.Tk()
     root.withdraw()
 
@@ -36,7 +34,7 @@ def create_graph(inf,file,move):
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15, 12))
     fig.tight_layout() # Or equivalently,  "plt.tight_layout()"
     plt.subplots_adjust(hspace=0.2, wspace=0.2)
-    axes[0,0].bar([i for i in range(len(np.array(inf.iloc[0])))],np.array(inf.iloc[0]),color="red")
+    axes[0,0].bar([i for i in range(len(np.array(inf.iloc[2])))],np.array(inf.iloc[1]),color="red")
     axes[0,0].set_xlabel("Araç No")
     axes[0,0].set_ylabel("Araçların Hızı")
     axes[0,0].set_title("Araçların Hız Grafikleri")
@@ -73,21 +71,21 @@ def create_graph(inf,file,move):
         root.destroy()  # Add this line to terminate the loop
 
     # Close the window after 45 seconds
-    if file:
-        os.remove(f"{move}"+"graphsperminute.xlsx")
-        shutil.move(f"{file}",f"{move}")
+    # if file:
+        # os.remove(f"{move}"+"graphsperminute.xlsx")
+        # shutil.move(f"{file}",f"{move}")
         
-        root.after(55000, close_window)
-        root.mainloop()
+    root.after(55000, close_window)
+    root.mainloop()
 # simdi=datetime.now()
 # x=1
 # file="/home/bagergat/Desktop/graphsperminute.xlsx"
-while True:
-    # while file not in os.listdir("/home/bagergat/Desktop/"):
-    import mailattachmentdownloader
-        # break
-    inf=pd.read_excel("/home/bagergat/Desktop/graphsperminute.xlsx")
-    create_graph(f"{move}graphsperminute.xlsx",file,move)
+# while True:
+#     # while file not in os.listdir("/home/bagergat/Desktop/"):
+#     import mailattachmentdownloader
+#         # break
+#     # inf=pd.read_excel("./kayitlarx.xlsx")
+#     create_graph(data)
     
     
     # x+=1
@@ -103,4 +101,22 @@ while True:
         # inf.pop(0)
         # inf.to_excel("./graphsperminute.xlsx")
         # inf = pd.read_excel("./graphsperminute.xlsx")
-        
+
+if __name__=="__main__":
+    while True:
+        if file in move:
+            print("evet")
+            break
+        else:
+            import mailattachmentdownloader
+            data=pd.read_excel("./used_files/yenikayit.xlsx")
+            # data.drop(0,axis=1,inplace=True)
+            data.drop("Unnamed: 0",axis=1,inplace=True)
+            create_graph(data)
+            
+# file="/home/bagergat/Desktop/graphsperminute.xlsx"
+# data=pd.read_excel("./used_files/yenikayit.xlsx")
+# data.drop(0,axis=1,inplace=True)
+# data.drop("Unnamed: 0",axis=1,inplace=True)
+# data.to_excel("/home/bagergat/Desktop/graphsperminute.xlsx")
+# print(type(inf))
