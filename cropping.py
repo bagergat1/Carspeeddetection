@@ -8,8 +8,3 @@ def crop_image(input_image_path, output_image_path, crop_box):
     
 
     cropped_img.save(output_image_path)
-
-
-
-
-

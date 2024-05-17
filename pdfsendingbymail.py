@@ -35,3 +35,6 @@ print("PDF gönderilmiştir.")
 os.remove("./used_files/yenikayit.xlsx")
 emptyfile=pd.DataFrame(emptyfile)
 emptyfile.to_excel("./used_files/yenikayit.xlsx")
+for filename in os.listdir("./Screenshots/"):
+    if filename.endswith(".png"):
+        os.remove("./Screenshots/"+f"{filename}")

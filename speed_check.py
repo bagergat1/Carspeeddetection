@@ -149,6 +149,13 @@ def trackMultipleObjects():
 		carIDtoDelete = []
 
 		for carID in carTracker.keys():
+			# print(carID)
+			# image = pyautogui.screenshot()
+			# image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
+			
+			# input_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
+			# output_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
+			# crop_image(input_image_path, output_image_path, crop_box)
 			trackingQuality = carTracker[carID].update(image)
 			
 			if trackingQuality < 7:
@@ -202,7 +209,10 @@ def trackMultipleObjects():
 
 		for carID in carTracker.keys():
 			trackedPosition = carTracker[carID].get_position()
-					
+			# print(carID)
+			# if pixel1<270 and pixel2>260:
+			# 	image = pyautogui.screenshot()
+			# 	image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
 			t_x = int(trackedPosition.left())
 			t_y = int(trackedPosition.top())
 			t_w = int(trackedPosition.width())
@@ -239,7 +249,7 @@ def trackMultipleObjects():
 
 			now2=datetime.now()
 			if now2.minute-now.minute==1*constant:
-				print(now2.minute-now.minute)
+				# print(now2.minute-now.minute)
 				send(part,sender_email,receiver_email,body)
 				constant+=1
 				print("Excel dosyası sanal sisteme gönderilmiştir.")
@@ -249,9 +259,37 @@ def trackMultipleObjects():
 		
 		if not (end_time == start_time):
 			fps = 1.0/(end_time - start_time)
-
-		for i in carLocation1.keys():	
+		# for i in carLocation1.values():
+		# 	print(i)
+		for i in speed:
+			if i!=None and i>yasal_hiz_siniri:
+				if f"{carID}.png" in os.listdir("./Screenshots/"):
+					# print("Var")
+					pass
+				else:
+					image = pyautogui.screenshot()
+					image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
+					input_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
+					output_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
+					crop_image(input_image_path, output_image_path, crop_box)
+					
+				# print(f"{carID}"+" "+f"{i}")
+		for i in carLocation1.keys():
 			
+				# print(speed)
+			# print(list(carLocation1.items())[:][:][:][:][:])	
+			# if list(carLocation1.values())[-1][1]>260 and list(carLocation1.values())[-1][1]<270:
+				# print("Evet")
+				# image = pyautogui.screenshot()
+				# image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
+			# *******************************
+
+
+
+			# ***********************************
+			# print(carID)
+			# image = pyautogui.screenshot()
+			# image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
 			if frameCounter % 1 == 0:
 				[x1, y1, w1, h1] = carLocation1[i]
 				[x2, y2, w2, h2] = carLocation2[i]
@@ -263,7 +301,7 @@ def trackMultipleObjects():
 						speed[i] = estimateSpeed([x1, y1, w1, h1], [x2, y2, w2, h2])
 
 					
-					if speed[i] != None and y1 >= 180:
+					if speed[i] != None and y1 >= 150:
 						cv2.putText(resultImage, str(int(speed[i])) + " kmh", (int(x1 + w1/2), int(y1-5)),cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2)
 					
 						asma_miktari=format(((speed[i]*100)/yasal_hiz_siniri)-100,".2f")
@@ -274,15 +312,17 @@ def trackMultipleObjects():
 							ceza_tutar=ceza_hesap(asma_miktari,hizsiniriasimorani,cezaorani)
 							hesaplanan_asma=asim_hesaplama(asma_miktari,hizsiniriasimorani)
 
-							for j in list(carLocation1.values()):
-								if j[1]<pixel2 and j[1]>pixel1:
-									image = pyautogui.screenshot()
-									image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
+							# for j in list(carLocation1.values()):
+								# print(j)
+								# if j[1]<pixel2 and j[1]>pixel1:
+									# print(carID)
+									# image = pyautogui.screenshot()
+									# image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
 									
-									input_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
-									output_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
+									# input_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
+									# output_image_path = f"/home/bagergat/Desktop/Bitirme/Screenshots/{carID}.png" 
 									# crop_box = (300, 100, 1100, 800) 
-									crop_image(input_image_path, output_image_path, crop_box)
+									# crop_image(input_image_path, output_image_path, crop_box)
 
 									# crop_image(input_image_pat
 									# print(video.__qualname__)h, output_image_path, crop_box)
@@ -303,6 +343,10 @@ def trackMultipleObjects():
 							ceza_yemeyenler.append(speed[i])
 							ceza_yemeyenler2=pd.Series(ceza_yemeyenler).unique()
 							pd.DataFrame(ceza_yemeyenler2).to_excel("ceza_almayan_araclar.xlsx")
+				# if y>pixel2 and y<pixel1:
+
+				# image = pyautogui.screenshot()
+				# image1 = pyautogui.screenshot(f"./Screenshots/{carID}.png")
 		cv2.imshow('result', resultImage)
 
 		if cv2.waitKey(33) == 27:
