@@ -7,7 +7,7 @@ import time
 from datetime import datetime
 import os
 import shutil
-move="/home/bagergat/Desktop/Bitirme/used_files/"
+move="/home/bager/Desktop/Bitirme/used_files/"
 file="yenikayit.xlsx"
 
 
@@ -75,7 +75,7 @@ def create_graph(inf):
         # os.remove(f"{move}"+"graphsperminute.xlsx")
         # shutil.move(f"{file}",f"{move}")
         
-    root.after(55000, close_window)
+    root.after(59000, close_window)
     root.mainloop()
 # simdi=datetime.now()
 # x=1
@@ -103,20 +103,101 @@ def create_graph(inf):
         # inf = pd.read_excel("./graphsperminute.xlsx")
 
 if __name__=="__main__":
+    
     while True:
-        if file in move:
-            print("evet")
-            break
+        if file in os.listdir(move):
+            data=pd.read_excel("./used_files/yenikayit.xlsx")
+            data.drop("Unnamed: 0",axis=1,inplace=True)
+            data.iloc[:,:]=0
+            os.remove(move+file)
+            create_graph(data)
+            print("Veri Bekleniyor.")
+            time.sleep(60)
+            # time.sleep(10)
+            continue
         else:
-            import mailattachmentdownloader
+            i=0
+            while i==0:
+                # import mailattachmentdownloader
+                # ***************************************************************************************************
+                
+                import email
+                import imaplib
+                import os
+
+                # Directory where attachments will be saved
+                detach_dir = './used_files/'
+
+                # Gmail account credentials
+                user = "birkullanicix@gmail.com"
+                pwd = "wrrt pxqr pyib nzcs"
+
+                # Connecting to the Gmail IMAP server
+                m = imaplib.IMAP4_SSL("imap.gmail.com", 993)
+
+                # Login to the Gmail account
+                m.login(user, pwd)
+
+                # Select the INBOX mailbox
+                m.select("INBOX")
+
+                # Search for unread emails with attachments
+                resp, items = m.search(None, 'UNSEEN', 'X-GM-RAW', 'has:attachment')
+
+                # Getting the mail IDs
+                items = items[0].split()
+
+                # Loop through the emails
+                for email_id in items:
+                    # Fetching the email
+                    resp, data = m.fetch(email_id, "(RFC822)")
+                    email_body = data[0][1]
+
+                    # Parsing the email content to get a mail object
+                    mail = email.message_from_bytes(email_body)
+
+                    # Check if any attachments exist
+                    if mail.get_content_maintype() != 'multipart':
+                        continue
+                    
+                    # Loop through the parts of the email
+                    for part in mail.walk():
+                        # Check if the part is an attachment
+                        if part.get_content_maintype() == 'multipart':
+                            continue
+                        if part.get('Content-Disposition') is None:
+                            continue
+                        
+                        # Check if the attachment is an Excel file
+                        if part.get_filename().endswith('.xls') or part.get_filename().endswith('.xlsx'):
+                            filename = part.get_filename()
+                            # print(filename)
+
+                            # Construct the file path to save the attachment
+                            att_path = os.path.join(detach_dir, filename)
+
+                            # Check if the file already exists
+                            if not os.path.isfile(att_path):
+                                # Write the attachment to the file
+                                with open(att_path, 'wb') as fp:
+                                    fp.write(part.get_payload(decode=True))
+
+                # Close the mailbox
+                m.close()
+
+                # Logout from the Gmail account
+                m.logout()
+
+                
+                # ***************************************************************************************************
+                print("Veri Bekleniyor.")
+                time.sleep(10)
+                if f"{file}" in os.listdir(move):
+                    
+                    i=1
             data=pd.read_excel("./used_files/yenikayit.xlsx")
             # data.drop(0,axis=1,inplace=True)
             data.drop("Unnamed: 0",axis=1,inplace=True)
             create_graph(data)
-            
-# file="/home/bagergat/Desktop/graphsperminute.xlsx"
-# data=pd.read_excel("./used_files/yenikayit.xlsx")
-# data.drop(0,axis=1,inplace=True)
-# data.drop("Unnamed: 0",axis=1,inplace=True)
-# data.to_excel("/home/bagergat/Desktop/graphsperminute.xlsx")
-# print(type(inf))
+            os.remove(move+file)
+            continue
