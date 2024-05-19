@@ -18,7 +18,7 @@ from datetime import datetime
 import shutil
 from yasal_hiz_siniri import video
 from yasal_hiz_siniri import crop_box
-# import smtplib
+from yasal_hiz_siniri import val
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -85,7 +85,7 @@ def estimateSpeed(location1, location2):
 	ppm = 8
 	d_meters = d_pixels / ppm
 	fps = 25
-	speed = d_meters * fps * 1.6
+	speed = d_meters * fps * val
 	return speed
 
 # def mail(carID,speed2,asma,ceza_tutar,hesaplanan_asma):
